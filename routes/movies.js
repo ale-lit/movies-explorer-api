@@ -9,7 +9,7 @@ const urlRegexpPattern = require('../regexp');
 
 moviesRouter.get('/movies', getMovies);
 
-moviesRouter.post('/cards', celebrate({
+moviesRouter.post('/movies', celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),

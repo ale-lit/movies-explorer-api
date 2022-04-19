@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -11,11 +12,7 @@ const NotFoundError = require('./errors/not-found-err');
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/filmsdb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+mongoose.connect('mongodb://localhost:27017/filmsdb');
 
 const app = express();
 
