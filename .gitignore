@@ -12,6 +12,7 @@
 /build
 
 # misc
+.env
 .DS_Store
 .env.local
 .env.development.local
@@ -29,9 +30,6 @@ logs
 *.log
 npm-debug.log*
 
-# Dependency directory
-node_modules
-
 # Optional npm cache directory
 .npm
 
@@ -39,5 +37,3 @@ node_modules
 .DS_Store
 .idea
 .vscode
-
-.env
