@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,16 @@
   "bugs": {
     "url": "https://github.com/ale-lit/movies-explorer-api/issues"
   },
-  "homepage": "https://github.com/ale-lit/movies-explorer-api#readme"
+  "homepage": "https://github.com/ale-lit/movies-explorer-api#readme",
+  "dependencies": {
+    "celebrate": "^15.0.1",
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
