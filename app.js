@@ -12,7 +12,7 @@ const NotFoundError = require('./errors/not-found-err');
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/filmsdb');
+mongoose.connect('mongodb://localhost:27017/moviesdb');
 
 const app = express();
 
