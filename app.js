@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
@@ -16,6 +17,8 @@ const { PORT = 3000 } = process.env;
 mongoose.connect('mongodb://localhost:27017/moviesdb');
 
 const app = express();
+
+app.use(helmet());
 
 app.use(limiter);
 
