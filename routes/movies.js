@@ -7,9 +7,9 @@ const {
 } = require('../controllers/movies');
 const urlRegexpPattern = require('../regexp');
 
-moviesRouter.get('/movies', getMovies);
+moviesRouter.get('/api/movies', getMovies);
 
-moviesRouter.post('/movies', celebrate({
+moviesRouter.post('/api/movies', celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
@@ -25,7 +25,7 @@ moviesRouter.post('/movies', celebrate({
   }),
 }), createMovie);
 
-moviesRouter.delete('/movies/:id', celebrate({
+moviesRouter.delete('/api/movies/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().hex().alphanum().length(24),
   }),
