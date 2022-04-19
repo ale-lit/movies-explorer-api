@@ -51,8 +51,7 @@ module.exports.getUserMe = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь по указанному id не найден.');
       }
-      const { name, email } = user;
-      res.status(200).send({ name, email });
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
