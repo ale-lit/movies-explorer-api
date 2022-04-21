@@ -18,31 +18,25 @@ const {
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
 
-  User.find({ email })
-    .then((result) => {
-      if (result.length === 0) {
-        bcrypt
-          .hash(password, 10)
-          .then((hash) => User.create({
-            email,
-            name,
-            password: hash,
-          }))
-          .then((user) => res.status(201).send({
-            name: user.name,
-            email: user.email,
-            _id: user._id,
-          }))
-          .catch((err) => {
-            if (err.name === 'ValidationError') {
-              throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
-            }
-            throw new DefaultError(DEFAULT_ERROR_RESPONSE);
-          })
-          .catch(next);
-      } else {
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      email,
+      name,
+      password: hash,
+    }))
+    .then((user) => res.status(201).send({
+      name: user.name,
+      email: user.email,
+      _id: user._id,
+    }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+      }
+      if (err.code === 11000) {
         throw new ConflictError(CONFLICT_ERROR_RESPONSE);
       }
+      throw new DefaultError(DEFAULT_ERROR_RESPONSE);
     })
     .catch(next);
 };
