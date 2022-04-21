@@ -5,12 +5,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { DATA_BASE, PORT } = require('./constants');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/limiter');
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
 const auth = require('./middlewares/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
 const allErrors = require('./middlewares/all-errors');
 const NotFoundError = require('./errors/not-found-err');
 
@@ -20,12 +20,12 @@ const app = express();
 
 app.use(helmet());
 
+app.use(requestLogger);
+
 app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(requestLogger);
 
 app.use(authRouter);
 
