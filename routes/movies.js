@@ -1,11 +1,12 @@
 const { celebrate, Joi } = require('celebrate');
 const moviesRouter = require('express').Router();
+const validator = require('validator');
 const {
   getMovies,
   createMovie,
   deleteMovie,
 } = require('../controllers/movies');
-const urlRegexpPattern = require('../regexp');
+const { WRONGURL_ERROR_RESPONSE } = require('../constants');
 
 moviesRouter.get('/movies', getMovies);
 
@@ -16,9 +17,24 @@ moviesRouter.post('/movies', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required().min(4).max(4),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(urlRegexpPattern),
-    trailerLink: Joi.string().required().pattern(urlRegexpPattern),
-    thumbnail: Joi.string().required().pattern(urlRegexpPattern),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message(WRONGURL_ERROR_RESPONSE);
+    }),
+    trailerLink: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message(WRONGURL_ERROR_RESPONSE);
+    }),
+    thumbnail: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message(WRONGURL_ERROR_RESPONSE);
+    }),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
