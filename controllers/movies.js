@@ -22,20 +22,17 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.id)
     .then((movie) => {
       if (!movie) {
-        next(new NotFoundError(BADREQUEST_ERROR_RESPONSE));
+        throw new NotFoundError(BADREQUEST_ERROR_RESPONSE);
       }
 
       if (String(movie.owner) === req.user._id) {
-        Movie.remove(req.params.id)
+        return movie.remove()
           .then(() => {
             res.status(200).send({ message: SUCCESS_RESPONSE });
-          })
-          .catch((err) => {
-            next(err);
           });
       }
 
-      next(new ForbiddenError(FORBIDDEN_ERROR_RESPONSE));
+      throw new ForbiddenError(FORBIDDEN_ERROR_RESPONSE);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
