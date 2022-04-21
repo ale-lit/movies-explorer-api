@@ -26,19 +26,13 @@ module.exports.deleteMovie = (req, res, next) => {
       }
 
       if (String(movie.owner) === req.user._id) {
-        Movie.findByIdAndRemove(req.params.id)
+        return Movie.findByIdAndRemove(req.params.id)
           .then(() => {
             res.status(200).send({ message: SUCCESS_RESPONSE });
-          })
-          .catch((err) => {
-            if (err.name === 'CastError') {
-              throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
-            }
-            throw new DefaultError(DEFAULT_ERROR_RESPONSE);
           });
-      } else {
-        throw new ForbiddenError(FORBIDDEN_ERROR_RESPONSE);
       }
+
+      throw new ForbiddenError(FORBIDDEN_ERROR_RESPONSE);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

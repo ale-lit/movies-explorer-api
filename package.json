@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Дипломная работа завершающая обучение в ЯП (Backend проект)",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
