@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const { DATA_BASE, PORT } = require('./constants');
 const limiter = require('./middlewares/limiter');
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
@@ -13,9 +14,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const allErrors = require('./middlewares/all-errors');
 const NotFoundError = require('./errors/not-found-err');
 
-const { PORT = 3000 } = process.env;
-
-mongoose.connect('mongodb://localhost:27017/moviesdb');
+mongoose.connect(DATA_BASE);
 
 const app = express();
 
