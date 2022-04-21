@@ -79,6 +79,11 @@ module.exports.updateUser = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch((err) => {
+      if (err.codeName === 'DuplicateKey') {
+        throw new ConflictError(
+          'Переданы конфликтующие данные при обновлении профиля.',
+        );
+      }
       if (err.name === 'ValidationError') {
         throw new BadRequestError(
           'Переданы некорректные данные при обновлении профиля.',
