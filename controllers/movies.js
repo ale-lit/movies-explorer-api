@@ -22,7 +22,7 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.id)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError(BADREQUEST_ERROR_RESPONSE);
+        next(new NotFoundError(BADREQUEST_ERROR_RESPONSE));
       }
 
       if (String(movie.owner) === req.user._id) {
@@ -32,15 +32,14 @@ module.exports.deleteMovie = (req, res, next) => {
           });
       }
 
-      throw new ForbiddenError(FORBIDDEN_ERROR_RESPONSE);
+      next(new ForbiddenError(FORBIDDEN_ERROR_RESPONSE));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
-      throw err;
-    })
-    .catch(next);
+      next(err);
+    });
 };
 
 module.exports.createMovie = (req, res, next) => {
@@ -76,9 +75,8 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
-      throw new DefaultError(DEFAULT_ERROR_RESPONSE);
-    })
-    .catch(next);
+      next(new DefaultError(DEFAULT_ERROR_RESPONSE));
+    });
 };

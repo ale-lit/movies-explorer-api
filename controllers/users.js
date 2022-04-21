@@ -31,31 +31,29 @@ module.exports.createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
       if (err.code === 11000) {
-        throw new ConflictError(CONFLICT_ERROR_RESPONSE);
+        next(new ConflictError(CONFLICT_ERROR_RESPONSE));
       }
-      throw new DefaultError(DEFAULT_ERROR_RESPONSE);
-    })
-    .catch(next);
+      next(new DefaultError(DEFAULT_ERROR_RESPONSE));
+    });
 };
 
 module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(NOTFOUND_ERROR_RESPONSE);
+        next(new NotFoundError(NOTFOUND_ERROR_RESPONSE));
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
-      throw err;
-    })
-    .catch(next);
+      next(err);
+    });
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -68,23 +66,22 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(NOTFOUND_ERROR_RESPONSE);
+        next(new NotFoundError(NOTFOUND_ERROR_RESPONSE));
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.codeName === 'DuplicateKey') {
-        throw new ConflictError(CONFLICT_ERROR_RESPONSE);
+        next(new ConflictError(CONFLICT_ERROR_RESPONSE));
       }
       if (err.name === 'ValidationError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
       if (err.name === 'CastError') {
-        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
+        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
       }
-      throw err;
-    })
-    .catch(next);
+      next(err);
+    });
 };
 
 module.exports.login = (req, res, next) => {
@@ -100,7 +97,6 @@ module.exports.login = (req, res, next) => {
       res.send({ token: `Bearer ${token}` });
     })
     .catch(() => {
-      throw new UnauthorizedError(UNAUTHORIZED_ERROR_RESPONSE);
-    })
-    .catch(next);
+      next(new UnauthorizedError(UNAUTHORIZED_ERROR_RESPONSE));
+    });
 };
