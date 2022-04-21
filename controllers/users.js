@@ -49,9 +49,6 @@ module.exports.getUserMe = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError(BADREQUEST_ERROR_RESPONSE));
-      }
       next(err);
     });
 };

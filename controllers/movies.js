@@ -26,9 +26,12 @@ module.exports.deleteMovie = (req, res, next) => {
       }
 
       if (String(movie.owner) === req.user._id) {
-        return Movie.findByIdAndRemove(req.params.id)
+        Movie.remove(req.params.id)
           .then(() => {
             res.status(200).send({ message: SUCCESS_RESPONSE });
+          })
+          .catch((err) => {
+            next(err);
           });
       }
 
