@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const { DATA_BASE, PORT } = require('./constants');
+const { DATA_BASE, PORT, NOTFOUND_ERROR_RESPONSE } = require('./constants');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/limiter');
 const authRouter = require('./routes/auth');
@@ -34,7 +34,7 @@ app.use(auth);
 app.use(usersRouter);
 app.use(moviesRouter);
 app.use((req, res, next) => {
-  next(new NotFoundError('Запрашиваемый ресурс не найден.'));
+  next(new NotFoundError(NOTFOUND_ERROR_RESPONSE));
 });
 
 app.use(errorLogger);

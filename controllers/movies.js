@@ -3,12 +3,18 @@ const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const DefaultError = require('../errors/default-err');
 const ForbiddenError = require('../errors/forbidden-err');
+const {
+  SUCCESS_RESPONSE,
+  DEFAULT_ERROR_RESPONSE,
+  BADREQUEST_ERROR_RESPONSE,
+  FORBIDDEN_ERROR_RESPONSE,
+} = require('../constants');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => res.status(200).send(movies))
     .catch(() => {
-      next(new DefaultError('Произошла ошибка'));
+      next(new DefaultError(DEFAULT_ERROR_RESPONSE));
     });
 };
 
@@ -16,27 +22,27 @@ module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.id)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Передан несуществующий id фильма.');
+        throw new NotFoundError(BADREQUEST_ERROR_RESPONSE);
       }
 
       if (String(movie.owner) === req.user._id) {
         Movie.findByIdAndRemove(req.params.id)
           .then(() => {
-            res.status(200).send({ message: 'Фильм удалён' });
+            res.status(200).send({ message: SUCCESS_RESPONSE });
           })
           .catch((err) => {
             if (err.name === 'CastError') {
-              throw new BadRequestError('Передан некорректный id фильма.');
+              throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
             }
-            throw new DefaultError('Произошла ошибка.');
+            throw new DefaultError(DEFAULT_ERROR_RESPONSE);
           });
       } else {
-        throw new ForbiddenError('Вы не являетесь создателем данного фильма.');
+        throw new ForbiddenError(FORBIDDEN_ERROR_RESPONSE);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Передан некорректный id фильма.');
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
       }
       throw err;
     })
@@ -76,11 +82,9 @@ module.exports.createMovie = (req, res, next) => {
     .then((movie) => res.status(201).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError(
-          'Переданы некорректные данные при добавлении фильма.',
-        );
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
       }
-      throw new DefaultError('Произошла ошибка');
+      throw new DefaultError(DEFAULT_ERROR_RESPONSE);
     })
     .catch(next);
 };

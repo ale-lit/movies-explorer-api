@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const urlRegexpPattern = require('../regexp');
+const { WRONGURL_ERROR_RESPONSE } = require('../constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegexpPattern.test(v);
       },
-      message: (props) => `${props.value} не корректный url!`,
+      message: (props) => `${props.value} - ${WRONGURL_ERROR_RESPONSE}!`,
     },
   },
   trailerLink: {
@@ -39,7 +40,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegexpPattern.test(v);
       },
-      message: (props) => `${props.value} не корректный url!`,
+      message: (props) => `${props.value} - ${WRONGURL_ERROR_RESPONSE}!`,
     },
   },
   thumbnail: {
@@ -49,7 +50,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return urlRegexpPattern.test(v);
       },
-      message: (props) => `${props.value} не корректный url!`,
+      message: (props) => `${props.value} - ${WRONGURL_ERROR_RESPONSE}!`,
     },
   },
   owner: {

@@ -6,7 +6,14 @@ const UnauthorizedError = require('../errors/unauthorized-err');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 const DefaultError = require('../errors/default-err');
-const { JWT_SECRET } = require('../constants');
+const {
+  JWT_SECRET,
+  DEFAULT_ERROR_RESPONSE,
+  BADREQUEST_ERROR_RESPONSE,
+  CONFLICT_ERROR_RESPONSE,
+  NOTFOUND_ERROR_RESPONSE,
+  UNAUTHORIZED_ERROR_RESPONSE,
+} = require('../constants');
 
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
@@ -28,17 +35,13 @@ module.exports.createUser = (req, res, next) => {
           }))
           .catch((err) => {
             if (err.name === 'ValidationError') {
-              throw new BadRequestError(
-                'Переданы некорректные данные при создании пользователя.',
-              );
+              throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
             }
-            throw new DefaultError('Произошла ошибка');
+            throw new DefaultError(DEFAULT_ERROR_RESPONSE);
           })
           .catch(next);
       } else {
-        throw new ConflictError(
-          `Пользователь с адресом электронной почты ${email} уже существует!`,
-        );
+        throw new ConflictError(CONFLICT_ERROR_RESPONSE);
       }
     })
     .catch(next);
@@ -48,15 +51,13 @@ module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному id не найден.');
+        throw new NotFoundError(NOTFOUND_ERROR_RESPONSE);
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError(
-          'Переданы некорректные данные вместо id пользователя.',
-        );
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
       }
       throw err;
     })
@@ -73,25 +74,19 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному id не найден.');
+        throw new NotFoundError(NOTFOUND_ERROR_RESPONSE);
       }
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.codeName === 'DuplicateKey') {
-        throw new ConflictError(
-          'Переданы конфликтующие данные при обновлении профиля.',
-        );
+        throw new ConflictError(CONFLICT_ERROR_RESPONSE);
       }
       if (err.name === 'ValidationError') {
-        throw new BadRequestError(
-          'Переданы некорректные данные при обновлении профиля.',
-        );
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
       }
       if (err.name === 'CastError') {
-        throw new BadRequestError(
-          'Переданы некорректные данные вместо id пользователя.',
-        );
+        throw new BadRequestError(BADREQUEST_ERROR_RESPONSE);
       }
       throw err;
     })
@@ -111,7 +106,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token: `Bearer ${token}` });
     })
     .catch(() => {
-      throw new UnauthorizedError('Передан неверный логин или пароль.');
+      throw new UnauthorizedError(UNAUTHORIZED_ERROR_RESPONSE);
     })
     .catch(next);
 };
