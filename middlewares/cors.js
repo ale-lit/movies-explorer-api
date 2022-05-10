@@ -3,6 +3,7 @@ const allowedCors = [
   'https://myfilms.nomoredomains.work',
   'http://myfilms.nomoredomains.work',
   'localhost:3000',
+  'http://localhost:3000',
 ];
 
 // Простые CORS-запросы
