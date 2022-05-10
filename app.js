@@ -13,6 +13,7 @@ const moviesRouter = require('./routes/movies');
 const auth = require('./middlewares/auth');
 const allErrors = require('./middlewares/all-errors');
 const NotFoundError = require('./errors/not-found-err');
+const corsAllow = require('./middlewares/cors');
 
 mongoose.connect(DATA_BASE);
 
@@ -26,6 +27,8 @@ app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(corsAllow);
 
 app.use(authRouter);
 
