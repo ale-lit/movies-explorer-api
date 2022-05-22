@@ -1,4 +1,4 @@
-# Дипломный проект: «Movies Explorer» (NodeJS + MongoDB)
+# Дипломный проект: «Movies Explorer» (Backend: NodeJS + MongoDB)
 
 <div align="center">
 
